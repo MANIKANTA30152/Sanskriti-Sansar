@@ -1,0 +1,125 @@
+.virtual-tours-container {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+    padding: 2rem;
+    min-height: calc(100vh - 80px);
+  }
+  
+  .sites-list-container {
+    padding: 1rem;
+  }
+  
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    color: #d35400;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+  }
+  
+  .sites-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .site-card {
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .site-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .site-card.active {
+    border: 2px solid #d35400;
+  }
+  
+  .site-image {
+    height: 150px;
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .site-info {
+    padding: 1rem;
+    background: white;
+  }
+  
+  .site-info h3 {
+    margin: 0;
+    color: #333;
+  }
+  
+  .site-info p {
+    margin: 0.5rem 0 0;
+    color: #666;
+  }
+  
+  .tour-viewer-container {
+    position: relative;
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 2rem;
+  }
+  
+  .tour-header {
+    margin-bottom: 2rem;
+  }
+  
+  .tour-header h2 {
+    font-family: 'Playfair Display', serif;
+    color: #333;
+    margin-bottom: 0.5rem;
+  }
+  
+  .location {
+    color: #d35400;
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+  
+  .description {
+    color: #555;
+    line-height: 1.6;
+  }
+  
+  .canvas-wrapper {
+    height: 500px;
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+  
+  .error-message {
+    color: #e74c3c;
+    text-align: center;
+    padding: 2rem;
+  }
+  
+  @media (max-width: 1024px) {
+    .virtual-tours-container {
+      grid-template-columns: 1fr;
+    }
+    
+    .sites-grid {
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+    
+    .canvas-wrapper {
+      height: 400px;
+    }
+  }

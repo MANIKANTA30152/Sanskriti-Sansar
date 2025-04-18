@@ -1,0 +1,99 @@
+.art-forms-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  
+  .art-forms-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  
+  .art-forms-header h1 {
+    font-size: 2.5rem;
+    color: #d35400;
+    margin-bottom: 1rem;
+  }
+  
+  .art-forms-tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    justify-content: center;
+  }
+  
+  .art-forms-tabs button {
+    padding: 0.5rem 1.5rem;
+    border: none;
+    background: #f0f0f0;
+    border-radius: 20px;
+    cursor: pointer;
+  }
+  
+  .art-forms-tabs button.active {
+    background: #d35400;
+    color: white;
+  }
+  
+  .art-forms-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+  
+  .art-form-card {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+  }
+  
+  .art-form-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .art-image {
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .art-details {
+    padding: 1.5rem;
+  }
+  
+  .art-details h3 {
+    margin-top: 0;
+    color: #d35400;
+  }
+  
+  .origin {
+    color: #666;
+    font-size: 0.9rem;
+    margin: 0.5rem 0;
+  }
+  
+  .description {
+    color: #333;
+    margin-bottom: 1rem;
+  }
+  
+  .explore-button {
+    background: none;
+    border: none;
+    color: #d35400;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+  }
+  
+  @media (max-width: 768px) {
+    .art-forms-header h1 {
+      font-size: 2rem;
+    }
+    
+    .art-forms-grid {
+      grid-template-columns: 1fr;
+    }
+  }

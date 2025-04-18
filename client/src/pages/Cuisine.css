@@ -1,0 +1,57 @@
+.cuisine-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  
+  .cuisine-container h1 {
+    text-align: center;
+    color: #d35400;
+    margin-bottom: 0.5rem;
+  }
+  
+  .subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 2rem;
+    font-size: 1.2rem;
+  }
+  
+  .cuisine-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+  
+  .cuisine-card {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+  }
+  
+  .cuisine-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .cuisine-image {
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .cuisine-info {
+    padding: 1.5rem;
+  }
+  
+  .cuisine-info h3 {
+    margin-top: 0;
+    color: #d35400;
+  }
+  
+  @media (max-width: 768px) {
+    .cuisine-grid {
+      grid-template-columns: 1fr;
+    }
+  }

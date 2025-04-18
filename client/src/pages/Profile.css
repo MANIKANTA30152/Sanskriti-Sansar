@@ -1,0 +1,117 @@
+.profile-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  
+  .profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+  }
+  
+  .profile-header h1 {
+    color: #d35400;
+    font-family: 'Playfair Display', serif;
+  }
+  
+  .logout-btn {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+  
+  .logout-btn:hover {
+    background-color: #c0392b;
+    transform: translateY(-2px);
+  }
+  
+  .profile-section {
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .profile-section h2 {
+    color: #333;
+    margin-bottom: 1.5rem;
+    font-family: 'Playfair Display', serif;
+  }
+  
+  .info-item {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+  }
+  
+  .info-item span {
+    font-weight: 600;
+    color: #333;
+    margin-right: 0.5rem;
+  }
+  
+  .favorites-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 2rem;
+  }
+  
+  .favorite-item {
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
+  }
+  
+  .favorite-item:hover {
+    transform: translateY(-5px);
+  }
+  
+  .favorite-image {
+    height: 150px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+  
+  .favorite-item h3 {
+    color: #d35400;
+    margin-bottom: 0.5rem;
+  }
+  
+  .favorite-item p {
+    color: #666;
+  }
+  
+  .explore-link {
+    display: inline-block;
+    background-color: #d35400;
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+  
+  .explore-link:hover {
+    background-color: #e67e22;
+    transform: translateY(-2px);
+  }
+  
+  @media (max-width: 768px) {
+    .profile-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    
+    .favorites-grid {
+      grid-template-columns: 1fr;
+    }
+  }
