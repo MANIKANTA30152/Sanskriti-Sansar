@@ -5,10 +5,9 @@ import Footer from './components/Footer';
 import Loader from './components/Loader';
 import ScrollToTop from './components/ScrollToTop';
 import PrivateRoute from './components/PrivateRoute';
-
-import About from './pages/About';  // Import About component
-
-
+import CulturalBlog from './pages/CulturalBlog';
+import BlogPost from './pages/BlogPost'; // Add this import
+import About from './pages/About';
 import './App.css';
 
 // Lazy load pages
@@ -23,7 +22,6 @@ const Register = lazy(() => import('./pages/Register'));
 const Profile = lazy(() => import('./pages/Profile'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 const Contact = lazy(() => import('./pages/Contact'));
-
 
 function App() {
   return (
@@ -41,19 +39,12 @@ function App() {
             <Route path="/cuisine" element={<Cuisine />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route
-              path="/profile"
-              element={
-                <PrivateRoute>
-                  <Profile />
-                </PrivateRoute>
-              }
-            />
-            <Route path="/about" element={<About />} />  {/* About Us page route */}
+            <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
+            <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
-
+            <Route path="/blog" element={<CulturalBlog />} />
+            <Route path="/blog/:id" element={<BlogPost />} />
             <Route path="*" element={<NotFound />} />
-            
           </Routes>
         </Suspense>
       </main>

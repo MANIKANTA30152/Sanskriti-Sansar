@@ -1,49 +1,149 @@
-/* client/src/pages/CulturalBlog.css */
-
-.blog-container {
+/* CulturalBlog.css */
+.culture-blog-container {
     max-width: 1200px;
-    margin: 4rem auto;
-    padding: 0 1.5rem;
-    font-family: 'Segoe UI', sans-serif;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    font-family: 'Poppins', sans-serif;
   }
   
-  .blog-title {
-    font-size: 2.5rem;
-    color: #d35400;
+  .blog-header {
     text-align: center;
+    margin-bottom: 3rem;
+    position: relative;
+  }
+  
+  .blog-header h1 {
+    color: #e91e63;
+    font-size: 2.5rem;
     margin-bottom: 0.5rem;
   }
   
-  .blog-intro {
-    text-align: center;
-    font-size: 1.1rem;
-    color: #555;
+  .blog-header p {
+    color: #666;
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .blog-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  
+  .create-post-btn,
+  .my-posts-btn {
+    display: inline-block;
+    padding: 0.6rem 1.2rem;
+    border-radius: 4px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+  
+  .create-post-btn {
+    background: #e91e63;
+    color: white;
+    border: 1px solid #e91e63;
+  }
+  
+  .create-post-btn:hover {
+    background: #c2185b;
+    border-color: #c2185b;
+  }
+  
+  .my-posts-btn {
+    background: white;
+    color: #e91e63;
+    border: 1px solid #e91e63;
+  }
+  
+  .my-posts-btn:hover {
+    background: #f8e1e7;
+  }
+  
+  .blog-categories {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .blog-categories span {
+    margin-right: 1rem;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .category-btn {
+    background: #f5f5f5;
+    border: none;
+    padding: 0.5rem 1.2rem;
+    margin: 0.3rem;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+  }
+  
+  .category-btn:hover {
+    background: #e91e63;
+    color: white;
+  }
+  
+  .category-btn.active {
+    background: #e91e63;
+    color: white;
+  }
+  
+  .blog-posts {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
     margin-bottom: 3rem;
   }
   
-  .blog-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-  }
-  
   .blog-card {
-    background: #fff;
     border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    background: white;
   }
   
   .blog-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 10px 24px rgba(0,0,0,0.1);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   }
   
   .blog-image {
+    position: relative;
     height: 200px;
-    background-size: cover;
-    background-position: center;
+    overflow: hidden;
+  }
+  
+  .blog-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+  
+  .blog-card:hover .blog-image img {
+    transform: scale(1.05);
+  }
+  
+  .blog-category {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: #e91e63;
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    text-transform: capitalize;
   }
   
   .blog-content {
@@ -51,32 +151,127 @@
   }
   
   .blog-content h2 {
-    font-size: 1.4rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.8rem;
+    font-size: 1.3rem;
     color: #333;
+    line-height: 1.4;
   }
   
-  .blog-date {
+  .blog-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+    color: #666;
+  }
+  
+  .blog-excerpt {
+    color: #555;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+    font-size: 0.95rem;
+  }
+  
+  .read-more-btn {
+    display: inline-block;
+    background: #e91e63;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.3s ease;
     font-size: 0.9rem;
-    color: #888;
+  }
+  
+  .read-more-btn:hover {
+    background: #c2185b;
+  }
+  
+  .blog-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+  }
+  
+  .pagination-btn {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #ddd;
+    background: white;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .pagination-btn.active {
+    background: #e91e63;
+    color: white;
+    border-color: #e91e63;
+  }
+  
+  .pagination-btn:hover:not(.active) {
+    background: #f5f5f5;
+  }
+  
+  .pagination-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  .loading,
+  .error {
+    text-align: center;
+    padding: 3rem;
+    font-size: 1.2rem;
+  }
+  
+  .error {
+    color: #f44336;
+  }
+  
+  .no-posts {
+    text-align: center;
+    grid-column: 1 / -1;
+    padding: 2rem;
+    color: #666;
+  }
+  
+  .no-posts p {
     margin-bottom: 1rem;
   }
   
-  .blog-content p {
-    font-size: 1rem;
-    color: #444;
-    line-height: 1.6;
-  }
+  @media (max-width: 768px) {
+    .blog-posts {
+      grid-template-columns: 1fr;
+    }
+    
+    .blog-header h1 {
+      font-size: 2rem;
+    }
   
-  .read-more {
-    display: inline-block;
-    margin-top: 1rem;
-    font-weight: bold;
-    color: #d35400;
-    text-decoration: none;
-  }
+    .blog-actions {
+      flex-direction: column;
+      align-items: center;
+    }
   
-  .read-more:hover {
-    text-decoration: underline;
-  }
+    .create-post-btn,
+    .my-posts-btn {
+      width: 100%;
+      max-width: 250px;
+      text-align: center;
+    }
   
+    .blog-categories {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .blog-categories span {
+      margin-bottom: 0.5rem;
+    }
+  }

@@ -1,6 +1,6 @@
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Environment, useGLTF } from '@react-three/drei';
-import { Suspense } from 'react';
+import { Suspense, useState } from 'react';
 import Loader from './Loader';
 
 function Model({ url }) {
@@ -9,11 +9,15 @@ function Model({ url }) {
 }
 
 function VirtualTourScene({ modelUrl }) {
+  const [isLoading, setIsLoading] = useState(true);
+
   return (
     <div className="canvas-container">
+      {isLoading && <Loader />}
       <Canvas
         camera={{ position: [0, 0, 5], fov: 60 }}
         gl={{ antialias: true }}
+        onCreated={() => setIsLoading(false)}
       >
         <Suspense fallback={null}>
           <ambientLight intensity={0.5} />

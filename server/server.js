@@ -1,63 +1,83 @@
 const express = require('express');
-const cors = require('cors');
-const mongoose = require('mongoose');
-const connectDB = require('./config/db');
 const path = require('path');
-require('dotenv').config();
+const dotenv = require('dotenv');
+const morgan = require('morgan');
+const colors = require('colors');
+const connectDB = require('./config/db');
+
+// Enhanced environment loading with debugging
+const envPath = path.resolve(__dirname, '.env');
+console.log(`\n=== Loading environment from: ${envPath} ===`.cyan);
+
+// Load environment variables with validation
+const envResult = dotenv.config({ path: envPath });
+if (envResult.error) {
+  console.error('❌ Error loading .env file:'.red, envResult.error);
+  process.exit(1);
+}
+
+console.log('=== Environment Variables ==='.cyan);
+console.log({
+  NODE_ENV: process.env.NODE_ENV || 'Not set (default: development)',
+  PORT: process.env.PORT || 'Not set (default: 5000)',
+  MONGO_URI: process.env.MONGO_URI ? '✔ Loaded'.green : '❌ Missing (required)'.red,
+  JWT_SECRET: process.env.JWT_SECRET ? '✔ Loaded'.green : '❌ Missing (required)'.red,
+});
+console.log('============================\n'.cyan);
+
+// Connect to database
+connectDB();
+
+// Route files
+const usersRouter = require('./routes/users');
 
 const app = express();
 
-// Connect to Database
-connectDB();
-
-// Trust proxy (important for rate limiting)
-app.set('trust proxy', 1);
-
-// Middleware
-app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? ['https://yourdomain.com', 'https://www.yourdomain.com'] 
-    : 'http://localhost:3000',
-  credentials: true
-}));
+// Body parser
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
-// Rate limiting
-const rateLimit = require('express-rate-limit');
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100 // limit each IP to 100 requests per windowMs
-});
-app.use(limiter);
-
-// Static files
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
-// Routes
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/heritage-sites', require('./routes/heritageSites'));
-// Make sure these lines exist in your server.js
-app.use('/api/users', require('./routes/users'));
-// Error handler middleware (make sure this comes after your routes)
-const errorHandler = require('./middleware/error');
-app.use(errorHandler);
-
-// Serve static assets in production
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../client/build')));
-  app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../client', 'build', 'index.html'));
-  });
+// Dev logging middleware
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
 }
 
-const PORT = process.env.PORT || 5000;
-const server = app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+// Mount routers
+app.use('/api/v1/users', usersRouter);
+
+// Health check endpoint
+app.get('/api/v1/health', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'Server is healthy',
+    environment: process.env.NODE_ENV,
+    timestamp: new Date().toISOString()
+  });
 });
 
-process.on('unhandledRejection', (err) => {
-  console.error(`Unhandled Rejection: ${err.message}`);
+const PORT = process.env.PORT || 5000;
+
+const server = app.listen(
+  PORT,
+  console.log(`\nServer running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`.yellow.bold)
+);
+
+// Enhanced error handling
+process.on('unhandledRejection', (err, promise) => {
+  console.error(`\n❌ Unhandled Rejection at: ${promise}\nError: ${err.message}`.red);
+  console.error(err.stack);
   server.close(() => process.exit(1));
+});
+
+process.on('uncaughtException', (err) => {
+  console.error('\n❌ Uncaught Exception:'.red, err.message);
+  console.error(err.stack);
+  server.close(() => process.exit(1));
+});
+
+// Graceful shutdown
+process.on('SIGTERM', () => {
+  console.log('\n🔴 SIGTERM received. Shutting down gracefully...'.yellow);
+  server.close(() => {
+    console.log('🟢 Process terminated'.green);
+  });
 });
