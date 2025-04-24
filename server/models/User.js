@@ -24,11 +24,15 @@ const UserSchema = new mongoose.Schema({
     minlength: 6,
     select: false
   },
+  favorites: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'HeritageSite'
+  }],
   createdAt: {
     type: Date,
     default: Date.now
   }
-});
+}, { strictPopulate: false });
 
 // Encrypt password using bcrypt
 UserSchema.pre('save', async function(next) {

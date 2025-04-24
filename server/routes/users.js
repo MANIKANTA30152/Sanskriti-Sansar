@@ -1,40 +1,28 @@
 const express = require('express');
 const router = express.Router();
-
-// Import with debug
-const authMiddleware = require('../middleware/auth');
-console.log('Auth Middleware:', {
-  protect: typeof authMiddleware.protect,
-  authorize: typeof authMiddleware.authorize
-});
-
 const {
   getUsers,
   getUser,
-  getMe,
   createUser,
   updateUser,
   deleteUser,
-  updateDetails,
-  updatePassword,
-  registerUser,
-  loginUser
+  getFavorites,
+  addFavorite,
+  removeFavorite
 } = require('../controllers/users');
+const { protect, authorize } = require('../middleware/auth');
 
-// Public routes
-router.post('/register', registerUser);
-router.post('/login', loginUser);
-
-// Protect all routes after this middleware
-router.use(authMiddleware.protect);
+// All routes protected after this middleware
+router.use(protect);
 
 // User profile routes
-router.get('/me', getMe);
-router.put('/updatedetails', updateDetails);
-router.put('/updatepassword', updatePassword);
+router.get('/me', getUser); // Reusing getUser with req.user.id
+router.get('/favorites', getFavorites);
+router.post('/favorites/:id', addFavorite);
+router.delete('/favorites/:id', removeFavorite);
 
-// Admin only routes
-router.use(authMiddleware.authorize('admin'));
+// Admin-only routes
+router.use(authorize('admin'));
 
 router.route('/')
   .get(getUsers)

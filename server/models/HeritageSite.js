@@ -1,41 +1,44 @@
 const mongoose = require('mongoose');
 
 const heritageSiteSchema = new mongoose.Schema({
-  name: { 
-    type: String, 
+  name: {
+    type: String,
     required: [true, 'Please add a name'],
     trim: true,
     maxlength: [100, 'Name cannot exceed 100 characters']
   },
-  location: { 
-    type: String, 
-    required: [true, 'Please add a location'] 
-  },
-  description: { 
-    type: String, 
-    required: [true, 'Please add a description'] 
-  },
-  historicalPeriod: { 
-    type: String, 
-    required: [true, 'Please specify historical period'] 
-  },
-  architecturalStyle: { 
+  location: {
     type: String,
-    trim: true
+    required: [true, 'Please add a location']
   },
-  image: { 
+  description: {
     type: String,
-    default: 'no-photo.jpg'
+    required: [true, 'Please add a description']
   },
-  virtualTour: { 
-    type: String 
+  image: {
+    type: String,
+    required: [true, 'Please add an image URL'],
+    match: [
+      /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/,
+      'Please use a valid URL with HTTP or HTTPS'
+    ]
   },
-  coordinates: {
-    lat: { type: Number },
-    lng: { type: Number }
+  hasVirtualTour: {
+    type: Boolean,
+    default: false
+  },
+  virtualTourUrl: {
+    type: String,
+    match: [
+      /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/,
+      'Please use a valid URL with HTTP or HTTPS'
+    ]
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
   }
 }, {
-  timestamps: true,
   toJSON: { virtuals: true },
   toObject: { virtuals: true }
 });

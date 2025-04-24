@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const HeritageSite = require('../models/HeritageSite');
+const { protect } = require('../middleware/auth');
 
 // @desc    Get all heritage sites
 // @route   GET /api/heritage-sites
@@ -16,8 +17,8 @@ router.get('/', async (req, res, next) => {
 
 // @desc    Add new heritage site
 // @route   POST /api/heritage-sites
-// @access  Public
-router.post('/', async (req, res, next) => {
+// @access  Private/Admin
+router.post('/', protect, async (req, res, next) => {
   try {
     const newSite = new HeritageSite({
       ...req.body,
