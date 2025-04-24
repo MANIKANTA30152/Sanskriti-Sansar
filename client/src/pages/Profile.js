@@ -1,33 +1,38 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import AuthContext from '../context/AuthContext';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import './Profile.css';
 
 function Profile() {
-  const { user, logout } = useContext(AuthContext);
+  const { user, logout } = useAuth();
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchFavorites = async () => {
       try {
-        const res = await axios.get('/api/users/favorites');
-        setFavorites(res.data);
+        const res = await axios.get('/api/v1/users/favorites');
+        setFavorites(res.data.data || []);
       } catch (err) {
-        console.error(err);
+        setError(err.response?.data?.error || 'Failed to load favorites');
+        console.error('Failed to fetch favorites:', err);
       } finally {
         setLoading(false);
       }
     };
 
-    if (user) {
+    if (!user) {
+      navigate('/login');
+    } else {
       fetchFavorites();
     }
-  }, [user]);
+  }, [user, navigate]);
 
   if (!user) {
-    return <div>Please log in to view your profile</div>;
+    return null;
   }
 
   return (
@@ -54,8 +59,9 @@ function Profile() {
 
       <div className="profile-section">
         <h2>Your Favorites</h2>
+        {error && <div className="alert alert-danger">{error}</div>}
         {loading ? (
-          <div>Loading favorites...</div>
+          <div className="loading-spinner">Loading...</div>
         ) : favorites.length > 0 ? (
           <div className="favorites-grid">
             {favorites.map((site) => (
@@ -67,7 +73,7 @@ function Profile() {
             ))}
           </div>
         ) : (
-          <div>
+          <div className="no-favorites">
             <p>You haven't added any favorites yet.</p>
             <Link to="/heritage-sites" className="explore-link">
               Explore Heritage Sites

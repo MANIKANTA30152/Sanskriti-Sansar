@@ -1,7 +1,6 @@
-// Login.js
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import AuthContext from '../context/AuthContext';
+import { useAuth } from '../context/AuthContext';
 import './Auth.css';
 
 function Login() {
@@ -9,22 +8,30 @@ function Login() {
     email: '',
     password: ''
   });
-
   const { email, password } = formData;
-  const { login, error, setError } = useContext(AuthContext);
+  const { user, login, error, clearErrors } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      navigate('/profile');
+    }
+    return () => clearErrors();
+  }, [user, navigate, clearErrors]);
 
   const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (error) clearErrors();
   };
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
-    const { success } = await login({ email, password });
-    if (success) {
-      navigate('/profile');
+    
+    if (!email || !password) {
+      return;
     }
+
+    await login({ email, password });
   };
 
   return (
@@ -59,12 +66,10 @@ function Login() {
             Login
           </button>
         </form>
-        <p className="auth-footer">
-          Don't have an account? <Link to="/register">Sign Up</Link>
-        </p>
-        <p className="auth-footer">
-          <Link to="/">Back to home</Link>
-        </p>
+        <div className="auth-links">
+          <p>Don't have an account? <Link to="/register">Sign Up</Link></p>
+          <p><Link to="/">Back to home</Link></p>
+        </div>
       </div>
     </div>
   );

@@ -1,30 +1,28 @@
+// src/components/PrivateRoute.js
 import { Navigate, Outlet } from 'react-router-dom';
-import AuthContext from '../context/AuthContext';
-import { useContext } from 'react';
+import { useAuth } from '../context/AuthContext';
 
-// Option 1: For wrapping individual route elements
+// For wrapping individual route elements
 function PrivateRoute({ children }) {
-  const { user } = useContext(AuthContext);
+  const { user, initialLoading } = useAuth();
   
-  if (!user) {
-    // Redirect to /login if not authenticated
-    return <Navigate to="/login" replace />;
+  if (initialLoading) {
+    return <div>Loading...</div>;
   }
 
-  return children;
+  return user ? children : <Navigate to="/login" replace />;
 }
 
-// Option 2: For layout routes (if you need to protect multiple routes)
+// For layout routes (protecting multiple routes)
 function PrivateLayout() {
-  const { user } = useContext(AuthContext);
+  const { user, initialLoading } = useAuth();
   
-  if (!user) {
-    return <Navigate to="/login" replace />;
+  if (initialLoading) {
+    return <div>Loading...</div>;
   }
 
-  return <Outlet />; // This will render child routes
+  return user ? <Outlet /> : <Navigate to="/login" replace />;
 }
 
-// Export both options
 export { PrivateRoute, PrivateLayout };
 export default PrivateRoute;

@@ -1,7 +1,7 @@
 import React from 'react';
 import './Cuisine.css';
-import cuisine1 from '../assets/taj-mahal.jpg'; // Using existing image
-import cuisine2 from '../assets/indian-culture.jpg';
+import cuisine1 from '../assets/north-indian.jpg'; // Using existing image
+import cuisine2 from '../assets/south-indian.jpg';
 
 function Cuisine() {
   const cuisines = [

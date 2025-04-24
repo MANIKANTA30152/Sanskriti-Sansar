@@ -1,14 +1,15 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useContext } from 'react';
-import AuthContext from '../context/AuthContext';
+import { useState } from 'react';
+import { useAuth } from '../context/AuthContext';
 import './Navbar.css';
-
 
 function Navbar() {
   const location = useLocation();
-  const { user, logout } = useContext(AuthContext);
-  
+  const navigate = useNavigate();
+  const { user, logout, logoutLoading } = useAuth();
+  const [showDropdown, setShowDropdown] = useState(false);
+
   const navItems = [
     { path: '/', name: 'Home' },
     { path: '/heritage-sites', name: 'Heritage Sites' },
@@ -16,9 +17,16 @@ function Navbar() {
     { path: '/festivals', name: 'Festivals' },
     { path: '/art-forms', name: 'Art Forms' },
     { path: '/cuisine', name: 'Cuisine' },
-    { path: '/about', name: 'About Us' }  // Added About Us link here
-  
+    { path: '/about', name: 'About Us' }
   ];
+
+  const toggleDropdown = () => setShowDropdown(!showDropdown);
+
+  const handleLogout = async () => {
+    await logout();
+    setShowDropdown(false);
+    navigate('/login');
+  };
 
   return (
     <nav className="navbar">
@@ -47,24 +55,29 @@ function Navbar() {
         ))}
 
         {user ? (
-          <>
+          <div className="profile-dropdown">
             <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              onClick={toggleDropdown}
             >
-              <Link to="/profile" className={location.pathname === '/profile' ? 'active' : ''}>
-                Profile
-              </Link>
+              <div className="profile-icon">
+                {user.name.charAt(0).toUpperCase()}
+              </div>
             </motion.div>
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <button onClick={logout} className="nav-logout">
-                Logout
-              </button>
-            </motion.div>
-          </>
+            {showDropdown && (
+              <div className="dropdown-menu">
+                <Link to="/profile" className="dropdown-item">Profile</Link>
+                <button 
+                  onClick={handleLogout} 
+                  className="dropdown-item"
+                  disabled={logoutLoading}
+                >
+                  {logoutLoading ? 'Logging out...' : 'Logout'}
+                </button>
+              </div>
+            )}
+          </div>
         ) : (
           <>
             <motion.div

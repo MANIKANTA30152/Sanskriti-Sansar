@@ -1,70 +1,46 @@
-import { useState, useEffect } from 'react';
+// src/pages/VirtualTours.js
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import VirtualTourScene from '../components/VirtualTour';
-import Loader from '../components/Loader';
+import { Link } from 'react-router-dom';
 import './VirtualTours.css';
 
 function VirtualTours() {
-  const [sites, setSites] = useState([]);
-  const [selectedSite, setSelectedSite] = useState(null);
+  const [virtualTours, setVirtualTours] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchSites = async () => {
+    const fetchVirtualTours = async () => {
       try {
-        const res = await axios.get('/api/heritage-sites');
-        setSites(res.data);
+        const response = await axios.get('/api/heritage-sites/virtual-tours');
+        setVirtualTours(response.data.data || []);
       } catch (err) {
-        setError(err.message);
+        setError(err.response?.data?.error || err.message);
       } finally {
         setLoading(false);
       }
     };
-    fetchSites();
+    
+    fetchVirtualTours();
   }, []);
 
-  if (loading) return <Loader />;
-  if (error) return <div className="error-message">Error: {error}</div>;
+  if (loading) return <div className="loading">Loading virtual tours...</div>;
+  if (error) return <div className="error">Error: {error}</div>;
+  if (!virtualTours.length) return <div className="empty">No virtual tours available</div>;
 
   return (
     <div className="virtual-tours-container">
-      <div className="sites-list-container">
-        <h1 className="section-title">Explore Indian Heritage</h1>
-        <div className="sites-grid">
-          {sites.map(site => (
-            <div 
-              key={site._id} 
-              className={`site-card ${selectedSite?._id === site._id ? 'active' : ''}`}
-              onClick={() => setSelectedSite(site)}
-            >
-              <div className="site-image" style={{ backgroundImage: `url(${site.image})` }} />
-              <div className="site-info">
-                <h3>{site.name}</h3>
-                <p>{site.location}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-      
-      <div className="tour-viewer-container">
-        {selectedSite ? (
-          <>
-            <div className="tour-header">
-              <h2>{selectedSite.name}</h2>
-              <p className="location">{selectedSite.location}</p>
-              <p className="description">{selectedSite.description}</p>
-            </div>
-            <div className="canvas-wrapper">
-              <VirtualTourScene modelUrl={selectedSite.virtualTour} />
-            </div>
-          </>
-        ) : (
-          <div className="placeholder">
-            <h3>Select a heritage site to begin virtual tour</h3>
+      <h1>Virtual Tours</h1>
+      <div className="tours-grid">
+        {virtualTours.map(tour => (
+          <div key={tour._id} className="tour-card">
+            <Link to={`/virtual-tours/${tour._id}`}>
+              <img src={tour.image} alt={tour.name} />
+              <h3>{tour.name}</h3>
+              <p>{tour.location}</p>
+            </Link>
           </div>
-        )}
+        ))}
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import AuthContext from '../context/AuthContext';
+import { useAuth } from '../context/AuthContext';
 import './Auth.css';
 
 function Register() {
@@ -12,44 +12,34 @@ function Register() {
   });
 
   const { name, email, password, confirmPassword } = formData;
-  const { register, error, setError, loading } = useContext(AuthContext);
+  const { register, error, clearErrors, loading } = useAuth();
   const navigate = useNavigate();
   const [validationError, setValidationError] = useState('');
 
   const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    if (error) setError('');
+    if (error) clearErrors();
     if (validationError) setValidationError('');
   };
 
-  // client/src/pages/Register.js
-const onSubmit = async (e) => {
-  e.preventDefault();
-  
-  if (password !== confirmPassword) {
-    setValidationError('Passwords do not match');
-    return;
-  }
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (password !== confirmPassword) {
+      setValidationError('Passwords do not match');
+      return;
+    }
 
-  if (password.length < 6) {
-    setValidationError('Password must be at least 6 characters');
-    return;
-  }
+    if (password.length < 8) {
+      setValidationError('Password must be at least 8 characters');
+      return;
+    }
 
-  try {
-    const result = await register({ name, email, password });
-    if (result?.success) {
+    const { success } = await register({ name, email, password });
+    if (success) {
       navigate('/profile');
     }
-  } catch (err) {
-    // This will catch the duplicate email error
-    if (err.response?.data?.error?.includes('Email already in use')) {
-      setValidationError('Email already in use');
-    } else {
-      setValidationError('Registration failed. Please try again.');
-    }
-  }
-};
+  };
 
   return (
     <div className="auth-container">
@@ -89,11 +79,11 @@ const onSubmit = async (e) => {
           <div className="form-group">
             <input
               type="password"
-              placeholder="Password (min 6 characters)"
+              placeholder="Password (min 8 characters)"
               name="password"
               value={password}
               onChange={onChange}
-              minLength="6"
+              minLength="8"
               required
             />
           </div>
@@ -105,7 +95,7 @@ const onSubmit = async (e) => {
               name="confirmPassword"
               value={confirmPassword}
               onChange={onChange}
-              minLength="6"
+              minLength="8"
               required
             />
           </div>
@@ -115,7 +105,7 @@ const onSubmit = async (e) => {
             className="btn btn-primary"
             disabled={loading}
           >
-            {loading ? 'Processing...' : 'Register'}
+            {loading ? 'Registering...' : 'Register'}
           </button>
         </form>
         
